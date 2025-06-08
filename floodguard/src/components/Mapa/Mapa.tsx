@@ -5,88 +5,101 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useEffect, useState } from "react";
 
-// Tipagem para níveis
+// Define níveis esperados
 type Nivel = "baixo" | "medio" | "alto";
 
+// Ícones conforme nível
 const icons: Record<Nivel, L.Icon> = {
   baixo: new L.Icon({
-    iconUrl: "/leaflet/marker-icon-verde.png",
-    shadowUrl: "/leaflet/marker-shadow.png",
+    iconUrl: "/icone-verde.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   }),
   medio: new L.Icon({
-    iconUrl: "/leaflet/marker-icon-amarelo.png",
-    shadowUrl: "/leaflet/marker-shadow.png",
+    iconUrl: "/icone-amarelo.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   }),
   alto: new L.Icon({
-    iconUrl: "/leaflet/marker-icon-vermelho.png",
-    shadowUrl: "/leaflet/marker-shadow.png",
+    iconUrl: "/icone-vermelho.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   }),
 };
 
+interface Alerta {
+  id: number;
+  tipoAlerta: string;
+  descricao: string;
+  dataHora: string;
+  localizacao: string; // se latitude/longitude vierem em localizacao, precisamos parse
+  gravidade: string;
+  latitude?: number;
+  longitude?: number;
+}
+
 export default function Mapa() {
-  const [alertas, setAlertas] = useState<any[]>([]);
+  const [alertas, setAlertas] = useState<Alerta[]>([]);
   const [filtroNivel, setFiltroNivel] = useState("todos");
 
   useEffect(() => {
     fetch("/api/alertas")
-      .then((res) => res.json())
-      .then(setAlertas)
+      .then(res => res.json())
+      .then((data: Alerta[]) => {
+        // se localizacao for string tipo "lat,lng", separa:
+        const parsed = data.map(a => {
+          let lat: number | undefined, lng: number | undefined;
+          if (a.latitude && a.longitude) {
+            lat = a.latitude; lng = a.longitude;
+          } else if (a.localizacao?.includes(",")) {
+            const [sLat, sLng] = a.localizacao.split(",");
+            lat = parseFloat(sLat);
+            lng = parseFloat(sLng);
+          }
+          return { ...a, latitude: lat, longitude: lng };
+        });
+        setAlertas(parsed);
+      })
       .catch(console.error);
   }, []);
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-2 justify-center">
-        {["todos", "baixo", "medio", "alto"].map((nivel) => (
+    <div>
+      <div className="flex gap-2 justify-center mb-4">
+        {["todos", "baixo", "medio", "alto"].map(n => (
           <button
-            key={nivel}
-            onClick={() => setFiltroNivel(nivel)}
-            className={`px-4 py-1 rounded text-white text-sm transition ${
-              filtroNivel === nivel
-                ? nivel === "baixo"
-                  ? "bg-green-600"
-                  : nivel === "medio"
-                  ? "bg-yellow-500"
-                  : nivel === "alto"
-                  ? "bg-red-600"
-                  : "bg-gray-600"
-                : "bg-gray-300 text-black"
-            }`}
+            key={n}
+            onClick={() => setFiltroNivel(n)}
+            className={`px-4 py-1 rounded text-white ${filtroNivel === n
+              ? (n === "baixo" ? "bg-green-600"
+                : n === "medio" ? "bg-yellow-500" : "bg-red-600")
+              : "bg-gray-300 text-black"}`}
           >
-            {nivel.charAt(0).toUpperCase() + nivel.slice(1)}
+            {n.charAt(0).toUpperCase() + n.slice(1)}
           </button>
         ))}
       </div>
 
-      <div className="h-[500px] w-full z-0">
-        <MapContainer center={[-23.55, -46.63]} zoom={11} style={{ height: "100%", width: "100%" }}>
-          <TileLayer
-            attribution="&copy; OpenStreetMap"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+      <div className="h-[500px] w-full">
+        <MapContainer center={[-23.55, -46.63]} zoom={11} scrollWheelZoom style={{ height: "100%", width: "100%" }}>
+          <TileLayer attribution="&copy; OpenStreetMap" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
           {alertas
-            .filter((a) => filtroNivel === "todos" || a.nivel.toLowerCase() === filtroNivel)
-            .map((alerta) => {
-              const nivel = alerta.nivel.toLowerCase() as Nivel;
+            .filter(a => {
+              const nivel = (a.gravidade || "baixo").toLowerCase();
+              return filtroNivel === "todos" || nivel === filtroNivel;
+            })
+            .map(a => {
+              if (a.latitude == null || a.longitude == null) return null;
+              const nivel = (a.gravidade || "baixo").toLowerCase() as Nivel;
               const icon = icons[nivel] || icons.baixo;
-
               return (
-                <Marker
-                  key={alerta.id}
-                  position={[alerta.latitude, alerta.longitude]}
-                  icon={icon}
-                >
+                <Marker key={a.id} position={[a.latitude, a.longitude]} icon={icon}>
                   <Popup>
-                    <strong>{alerta.nivel}</strong><br />
-                    {alerta.descricao}<br />
-                    <small>{new Date(alerta.data).toLocaleString()}</small>
+                    <strong>{a.tipoAlerta}</strong><br/>
+                    {a.descricao}<br/>
+                    <em>{a.localizacao}</em><br/>
+                    <small>{new Date(a.dataHora).toLocaleString()}</small>
                   </Popup>
                 </Marker>
               );

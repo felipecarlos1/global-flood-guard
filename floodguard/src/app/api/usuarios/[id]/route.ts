@@ -1,26 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { usuarios } from "@/lib/usuariosDB";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  const id = parseInt(params.id);
-  const body = await req.json();
-  const index = usuarios.findIndex((u) => u.id === id);
+const API_BASE = "https://gs-api-floodguard-production.up.railway.app";
 
-  if (index === -1) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
-  }
-
-  usuarios[index] = { ...usuarios[index], ...body };
-  return NextResponse.json(usuarios[index]);
+// GET /api/usuarios/:id → retorna um usuário específico
+export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
+  const res = await fetch(`${API_BASE}/usuarios/${params.id}`);
+  const data = await res.json();
+  return NextResponse.json(data);
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const id = parseInt(params.id);
-  const usuario = usuarios.find((u) => u.id === id);
+// PUT /api/usuarios/:id → atualiza um usuário
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  const body = await req.json();
 
-  if (!usuario) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
-  }
+  const res = await fetch(`${API_BASE}/usuarios/${params.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
 
-  return NextResponse.json(usuario);
+  const data = await res.json();
+  return NextResponse.json(data);
 }

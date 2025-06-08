@@ -9,7 +9,12 @@ export default function AlertasPage() {
   const [filtroNivel, setFiltroNivel] = useState("todos");
 
   useEffect(() => {
-    getAlertas().then(setAlertas).catch(console.error);
+    getAlertas()
+      .then((data) => {
+        console.log("Alertas recebidos:", data);
+        setAlertas(data);
+      })
+      .catch(console.error);
   }, []);
 
   return (
@@ -40,19 +45,21 @@ export default function AlertasPage() {
 
       <ul className="space-y-4">
         {alertas
-          .filter((a) => filtroNivel === "todos" || a.nivel.toLowerCase() === filtroNivel)
+          .filter((a) => {
+            const nivel = (a.nivel || a.gravidade || "").toLowerCase();
+            return filtroNivel === "todos" || nivel === filtroNivel;
+          })
           .map((alerta) => (
-            <li
-              key={alerta.id}
-              className="border p-4 rounded shadow-sm bg-white"
-            >
-              <strong className="block mb-1 capitalize">Nível: {alerta.nivel}</strong>
+            <li key={alerta.id} className="border p-4 rounded shadow-sm bg-white">
+              <strong className="block mb-1 capitalize">
+                Nível: {alerta.nivel || alerta.gravidade}
+              </strong>
               <p className="text-sm text-gray-700 mb-1">{alerta.descricao}</p>
               <p className="text-xs text-gray-500">
                 Lat: {alerta.latitude} | Lng: {alerta.longitude}
               </p>
               <p className="text-xs text-gray-400">
-                {new Date(alerta.data).toLocaleString()}
+                {new Date(alerta.data || alerta.dataHora).toLocaleString()}
               </p>
             </li>
           ))}

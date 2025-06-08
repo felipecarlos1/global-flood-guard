@@ -1,20 +1,24 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-let alertas: any[] = [];
+const API_BASE = "https://gs-api-floodguard-production.up.railway.app";
 
+// GET /api/alertas → lista todos os alertas
 export async function GET() {
-  return NextResponse.json(alertas);
+  const res = await fetch(`${API_BASE}/alertas`);
+  const data = await res.json();
+  return NextResponse.json(data);
 }
 
-export async function POST(req: Request) {
+// POST /api/alertas → cria novo alerta
+export async function POST(req: NextRequest) {
   const body = await req.json();
-  const novoAlerta = {
-    id: alertas.length + 1,
-    data: new Date().toISOString(),
-    ...body,
-    latitude: parseFloat(body.latitude),
-    longitude: parseFloat(body.longitude),
-  };
-  alertas.push(novoAlerta);
-  return NextResponse.json(novoAlerta, { status: 201 });
+
+  const res = await fetch(`${API_BASE}/alertas`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const data = await res.json();
+  return NextResponse.json(data);
 }

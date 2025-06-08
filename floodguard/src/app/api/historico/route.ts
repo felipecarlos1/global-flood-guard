@@ -1,18 +1,20 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-let historico: any[] = [];
+const BASE_URL = "https://gs-api-floodguard-production.up.railway.app/historico-enchentes";
 
 export async function GET() {
-  return NextResponse.json(historico);
+  const res = await fetch(BASE_URL);
+  const data = await res.json();
+  return NextResponse.json(data);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const body = await req.json();
-  const novoRegistro = {
-    id: historico.length + 1,
-    data: new Date().toISOString(),
-    ...body,
-  };
-  historico.push(novoRegistro);
-  return NextResponse.json(novoRegistro, { status: 201 });
+  const res = await fetch(BASE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  return NextResponse.json(data);
 }
