@@ -4,8 +4,19 @@ import { useEffect, useState } from "react";
 import { getAlertas } from "@/lib/api";
 import Botao from "@/components/Botao/Botao";
 
+interface Alerta {
+  id: number;
+  nivel?: string;
+  gravidade?: string;
+  descricao: string;
+  latitude: number;
+  longitude: number;
+  data?: string;
+  dataHora?: string;
+}
+
 export default function AlertasPage() {
-  const [alertas, setAlertas] = useState<any[]>([]);
+  const [alertas, setAlertas] = useState<Alerta[]>([]);
   const [filtroNivel, setFiltroNivel] = useState("todos");
 
   useEffect(() => {
@@ -59,7 +70,7 @@ export default function AlertasPage() {
                 Lat: {alerta.latitude} | Lng: {alerta.longitude}
               </p>
               <p className="text-xs text-gray-400">
-                {new Date(alerta.data || alerta.dataHora).toLocaleString()}
+                {new Date(alerta.data || alerta.dataHora || "").toLocaleString()}
               </p>
             </li>
           ))}

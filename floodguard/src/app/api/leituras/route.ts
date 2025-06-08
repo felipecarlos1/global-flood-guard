@@ -1,18 +1,30 @@
 import { NextResponse } from "next/server";
 
-let leituras: any[] = [];
-
-export async function GET() {
-  return NextResponse.json(leituras);
+interface Leitura {
+  id: number;
+  sensor: string;
+  valor: number;
+  unidade: string;
+  dataHora: string;
 }
 
-export async function POST(req: Request) {
-  const body = await req.json();
-  const novaLeitura = {
-    id: leituras.length + 1,
-    data: new Date().toISOString(),
-    ...body,
-  };
-  leituras.push(novaLeitura);
-  return NextResponse.json(novaLeitura, { status: 201 });
+export async function GET() {
+  const leituras: Leitura[] = [
+    {
+      id: 1,
+      sensor: "chuva-01",
+      valor: 25.4,
+      unidade: "mm",
+      dataHora: "2025-06-08T14:00:00Z",
+    },
+    {
+      id: 2,
+      sensor: "nivel-rio-02",
+      valor: 3.2,
+      unidade: "m",
+      dataHora: "2025-06-08T14:05:00Z",
+    },
+  ];
+
+  return NextResponse.json(leituras);
 }

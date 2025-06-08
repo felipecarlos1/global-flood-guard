@@ -1,16 +1,42 @@
 const BASE = "/api";
 
-export async function getAlertas() {
-  const res = await fetch(`${BASE}/alertas`);
-  return res.json();
+// Tipos usados
+interface Alerta {
+  nivel: string;
+  descricao: string;
+  latitude: number;
+  longitude: number;
+  data?: string;
 }
 
-export async function postAlerta(data: any) {
-  const res = await fetch(`${BASE}/alertas`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+interface Historico {
+  dataHora: string;
+  localizacao: string;
+  nivelMaximo: string;
+}
+
+interface Leitura {
+  sensorId: string;
+  valor: number;
+  dataHora?: string;
+}
+
+interface Usuario {
+  nome: string;
+  email: string;
+  senha: string;
+  cidade: string;
+  bairro: string;
+}
+
+interface Configuracao {
+  chave: string;
+  valor: string;
+}
+
+// Funções GET
+export async function getAlertas() {
+  const res = await fetch(`${BASE}/alertas`);
   return res.json();
 }
 
@@ -19,26 +45,8 @@ export async function getHistorico() {
   return res.json();
 }
 
-export async function postHistorico(data: any) {
-  const res = await fetch(`${BASE}/historico`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  return res.json();
-}
-
 export async function getLeituras() {
   const res = await fetch(`${BASE}/leituras`);
-  return res.json();
-}
-
-export async function postLeitura(data: any) {
-  const res = await fetch(`${BASE}/leituras`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
   return res.json();
 }
 
@@ -47,7 +55,49 @@ export async function getUsuarios() {
   return res.json();
 }
 
-export async function postUsuario(data: any) {
+export async function getConfiguracoes() {
+  const res = await fetch(`${BASE}/configuracoes`);
+  return res.json();
+}
+
+// Funções POST
+export async function postAlerta(data: Alerta) {
+  const res = await fetch(`${BASE}/alertas`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function postHistorico(data: Historico) {
+  const res = await fetch(`${BASE}/historico`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function postLeitura(data: Leitura) {
+  const res = await fetch(`${BASE}/leituras`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function postConfiguracao(data: Configuracao) {
+  const res = await fetch(`${BASE}/configuracoes`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function cadastrarUsuario(data: Usuario) {
   try {
     const response = await fetch(`https://gs-api-floodguard-production.up.railway.app/usuarios`, {
       method: "POST",
@@ -74,20 +124,7 @@ export async function postUsuario(data: any) {
   }
 }
 
-export async function getConfiguracoes() {
-  const res = await fetch(`${BASE}/configuracoes`);
-  return res.json();
-}
-
-export async function postConfiguracao(data: any) {
-  const res = await fetch(`${BASE}/configuracoes`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  return res.json();
-}
-
+// Logout
 export function logout() {
   localStorage.removeItem("logado");
   localStorage.removeItem("usuarioId");

@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { logout } from "@/lib/api";
 
 export default function Menu() {
-  const router = useRouter();
   const [logado, setLogado] = useState(false);
 
   useEffect(() => {

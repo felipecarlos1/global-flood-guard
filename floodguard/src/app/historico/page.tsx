@@ -3,8 +3,15 @@ import { useEffect, useState } from "react";
 import { getHistorico } from "@/lib/api";
 import { useRouter } from "next/navigation";
 
+interface Historico {
+  id: number;
+  dataHora: string;
+  localizacao: string;
+  nivelMaximo: string;
+}
+
 export default function HistoricoPage() {
-  const [historico, setHistorico] = useState([]);
+  const [historico, setHistorico] = useState<Historico[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -13,7 +20,7 @@ export default function HistoricoPage() {
       return;
     }
     getHistorico().then(setHistorico).catch(console.error);
-  }, []);
+  }, [router]); // incluímos router nas dependências
 
   return (
     <section className="p-6">
@@ -27,7 +34,7 @@ export default function HistoricoPage() {
           </tr>
         </thead>
         <tbody>
-          {historico.map((h: any) => (
+          {historico.map((h) => (
             <tr key={h.id} className="border-t">
               <td className="py-2">{new Date(h.dataHora).toLocaleString()}</td>
               <td className="py-2">{h.localizacao}</td>

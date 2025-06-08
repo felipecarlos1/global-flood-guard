@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BASE_URL = "https://gs-api-floodguard-production.up.railway.app/configuracoes";
+const BASE_URL = "https://gs-api-floodguard-production.up.railway.app/usuarios";
 
 export async function GET() {
   const res = await fetch(BASE_URL);
