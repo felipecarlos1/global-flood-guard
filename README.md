@@ -32,4 +32,26 @@ O projeto frontend foi construído utilizando as seguintes tecnologias:
 *   ## Configuração do Ambiente
  
 Para configurar e executar o projeto localmente, siga os passos abaixo:
+ 
+### Pré-requisitos
+ 
+Certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
+ 
+*   Node.js (versão 18 ou superior recomendada)
+*   npm ou Yarn (gerenciador de pacotes)
+ 
+### Instalação
+ 
+1.  **Clone o repositório:**
+    ```bash
+    git clone <URL_DO_SEU_REPOSITORIO_FRONTEND>
+    cd global-flood-guard-main/floodguard
+    ```
+ 
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    # ou
+    yarn install
+    ```
 
