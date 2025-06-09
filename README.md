@@ -54,4 +54,23 @@ Certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
     # ou
     yarn install
     ```
-
+## Conexão com a API Backend
+ 
+Este frontend se comunica com uma API de backend desenvolvida em Quarkus. Para que a comunicação funcione corretamente, é crucial que a URL da API esteja configurada corretamente.
+ 
+### Configuração da URL da API
+ 
+O arquivo responsável pela configuração da URL da API é `src/lib/api.ts`.
+ 
+1.  **Abra o arquivo:** `src/lib/api.ts`
+ 
+2.  **Localize a linha:**
+    ```typescript
+    const BASE = "/api";
+    ```
+ 
+3.  **Altere para a URL completa da sua API implantada no Railway:**
+    ```typescript
+    const BASE = "https://gs-api-floodguard-production.up.railway.app";
+    ```
+ 
