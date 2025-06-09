@@ -19,3 +19,13 @@ O Global Flood Guard é uma solução abrangente para o monitoramento de enchent
 *   **Autenticação:** Sistema de login e cadastro de usuários.
 *   **Mapa Interativo:** (A ser confirmado após análise mais profunda do código) Possível visualização de dados em um mapa.
 
+*   ## Tecnologias Utilizadas
+ 
+O projeto frontend foi construído utilizando as seguintes tecnologias:
+ 
+*   **Next.js 15.3.3:** Framework React para construção de aplicações web com renderização do lado do servidor (SSR) e geração de sites estáticos (SSG).
+*   **React 19.0.0:** Biblioteca JavaScript para construção de interfaces de usuário.
+*   **TypeScript 5:** Superset do JavaScript que adiciona tipagem estática.
+*   **Tailwind CSS 4:** Framework CSS utilitário para estilização rápida e responsiva.
+*   **Leaflet 1.9.4 & React-Leaflet 5.0.0:** Bibliotecas para criação de mapas interativos.
+
