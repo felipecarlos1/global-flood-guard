@@ -10,5 +10,12 @@ O Global Flood Guard é uma solução abrangente para o monitoramento de enchent
 *   Apresentar alertas de enchentes.
 *   Permitir a configuração de preferências do usuário.
 *   Fornecer uma interface de usuário amigável para interação com o sistema.
+*   
+## Funcionalidades
+ 
+*   **Visualização de Alertas:** Exibe alertas de enchentes em tempo real.
+*   **Histórico de Dados:** Permite consultar o histórico de níveis de água e eventos de enchente.
+*   **Configurações do Usuário:** Gerenciamento de preferências e informações do usuário.
+*   **Autenticação:** Sistema de login e cadastro de usuários.
+*   **Mapa Interativo:** (A ser confirmado após análise mais profunda do código) Possível visualização de dados em um mapa.
 
-  
