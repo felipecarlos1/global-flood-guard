@@ -29,3 +29,7 @@ O projeto frontend foi construído utilizando as seguintes tecnologias:
 *   **Tailwind CSS 4:** Framework CSS utilitário para estilização rápida e responsiva.
 *   **Leaflet 1.9.4 & React-Leaflet 5.0.0:** Bibliotecas para criação de mapas interativos.
 
+*   ## Configuração do Ambiente
+ 
+Para configurar e executar o projeto localmente, siga os passos abaixo:
+
